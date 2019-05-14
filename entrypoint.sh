@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # add our svn location to the httpd config
-cat <<EOF > /usr/local/apache2/conf/extra/vife.conf
+cat <<EOF > /usr/local/apache2/conf/extra/docker.conf
 LoadModule	dav_module           modules/mod_dav.so
 LoadModule	dav_svn_module       /usr/lib/apache2/modules/mod_dav_svn.so
 LoadModule	authz_svn_module     /usr/lib/apache2/modules/mod_authz_svn.so
@@ -16,7 +16,7 @@ RequestHeader edit Destination ^https: http: early
     DAV svn
     SVNParentPath /var/svn
     SVNListParentPath On
-    AuthName "ViFE Subversion Repositories: Login mit Nutzernamen und Passwort" 
+    AuthName "Subversion Repositories: LDAP login" 
     AuthBasicProvider ldap
     AuthType Basic
     AuthLDAPGroupAttribute member
@@ -24,7 +24,7 @@ RequestHeader edit Destination ^https: http: early
     AuthLDAPURL ${AuthLDAPURL}
     AuthLDAPBindDN "${AuthLDAPBindDN}" 
     AuthLDAPBindPassword "${AuthLDAPBindPassword}" 
-    Require ldap-group CN=${RequireLDAPGroup},CN=Users,DC=muwi,DC=hfm-detmold,DC=de
+    Require valid-user
     # read-only access
     <limit GET PROPFIND OPTIONS HEAD REPORT>
         Require ldap-user redmine
