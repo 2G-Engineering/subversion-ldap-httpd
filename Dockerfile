@@ -1,5 +1,4 @@
 FROM httpd:2.4
-LABEL maintainer="Andy Lo-A-Foe at aemian dot com"
 
 # For information about these parameters see 
 # https://httpd.apache.org/docs/2.4/mod/mod_authnz_ldap.html
@@ -11,6 +10,8 @@ RUN apt-get update && apt-get --yes --force-yes --no-install-recommends install 
     && rm -rf /var/lib/apt/lists/*
 COPY entrypoint.sh /my-docker-entrypoint.sh
 RUN chmod 755 /my-docker-entrypoint.sh
+
+ENV SVN_LOCATION svn
 
 WORKDIR /usr/local/apache2
 RUN echo "Include conf/extra/docker.conf" >> conf/httpd.conf
