@@ -12,23 +12,23 @@ LoadModule	authnz_ldap_module   modules/mod_authnz_ldap.so
 # see http://www.dscentral.in/2013/04/04/502-bad-gateway-svn-copy-reverse-proxy/  
 RequestHeader edit Destination ^https: http: early
 
-<Location />
+<Location /${SVN_LOCATION}>
     DAV svn
     SVNParentPath /var/svn
     SVNListParentPath On
-    AuthName "Subversion Repositories: LDAP login" 
+    AuthName "Subversion Repositories: LDAP login"
     AuthBasicProvider ldap
     AuthType Basic
     AuthLDAPGroupAttribute member
     AuthLDAPGroupAttributeIsDN on
     AuthLDAPURL ${AuthLDAPURL}
-    AuthLDAPBindDN "${AuthLDAPBindDN}" 
-    AuthLDAPBindPassword "${AuthLDAPBindPassword}" 
-    Require valid-user
-    # read-only access
-    <limit GET PROPFIND OPTIONS HEAD REPORT>
-        Require ldap-user redmine
-    </limit>
+    AuthLDAPBindDN "${AuthLDAPBindDN}"
+    AuthLDAPBindPassword "${AuthLDAPBindPassword}"
+    # read-only access for everyone.
+    # require login in order to commit
+    <LimitExcept GET PROPFIND OPTIONS REPORT>
+      Require valid-user
+    </LimitExcept>
 </Location>
 EOF
 
