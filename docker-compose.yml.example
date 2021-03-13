@@ -1,0 +1,16 @@
+version: '3.4'
+
+services:
+  svn:
+    build: .
+    container_name: mySVN
+    restart: always
+    ports:
+      - 8888:80
+    environment:
+      - AuthLDAPURL="ldap://ldapserver:389/ou=People,dc=example,dc=com?uid?sub?(objectClass=*)"
+      - AuthLDAPBindDN=cn=admin,ou=People,dc=example,dc=com
+      - AuthLDAPBindPassword=password
+      - SVN_LOCATION=svn
+    volumes:
+      - ./svn_data:/var/svn
